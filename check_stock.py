@@ -16,9 +16,15 @@ def check_stock():
         response = requests.get(URL, headers=headers, timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
-        buttons = soup.find_all("button")
-        sold_out = any("sold out" in btn.get_text(strip=True).lower() for btn in buttons)
-        return not sold_out
+
+        stock_status = soup.find("span", class_="product-stock-status")
+        if stock_status and "sold out" in stock_status.get_text(strip=True).lower():
+            print("Confirmed: Product is still sold out.")
+            return False
+        else:
+            print("No 'Sold Out' status found. Might be in stock!")
+            return True
+
     except Exception as e:
         print(f"[ERROR] Failed to check stock: {e}")
         return False
