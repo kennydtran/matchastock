@@ -44,7 +44,7 @@ def send_email():
     except Exception as e:
         print(f"[ERROR] Failed to send email: {e}")
 
-if check_stock():
+if True:
     send_email()
 else:
     print("Still sold out.")
